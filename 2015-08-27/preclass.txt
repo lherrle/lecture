@@ -8,13 +8,26 @@
     you should use a script to produce this plot, with both the serial
     fraction and the maximum number of cores as parameters.
 
+	in files speedup.pdf, efficiency.pdf
+
 2.  Suppose a particular program can be partitioned into perfectly
     independent tasks, each of which takes time tau.  Tasks are
     set up, scheduled, and communicated to p workers at a (serial)
     central server; this takes an overhead time alpha per task.
     What is the theoretically achievable throughput (tasks/time)?
 
+	time to complete k tasks: k*alpha + k*tau/p
+	throughput: (k tasks)/(time to complete k tasks)
+		   = k / (k(alpha + tau/p))
+		   = 1/(alpha + tau/p)
+		   = p/(p*alpha + tau)
+		   = p/p*alpha + p/tau
+		   = 1/alpha + p/tau		
+
 3.  Under what circumstances is it best to not tune?
+	- the human time to tune is more expensive than the computation time saved by tuning
+	- tuning creates spaghetti code which makes maintenance difficult
+	- tuning things that aren’t bottlenecks
 
 4.  The class cluster consists of eight nodes and fifteen Xeon Phi
     accelerator boards.  Based on an online search for information on
@@ -23,5 +36,17 @@
     you computed this, and give URLs for where you got the parameters
     in your calculation.  (We will return to this question again after
     we cover some computer architecture.)
+	http://ark.intel.com/products/71992/Intel-Xeon-Phi-Coprocessor-5110P-8GB-1_053-GHz-60-core
+	http://ark.intel.com/products/83352/Intel-Xeon-Processor-E5-2620-v3-15M-Cache-2_40-GHz
+
+	16 FLOPS/cycle * 60 cores * 1.053 GHz = 1010.88 GF/s - accelerator board
+	16 FLOPS/cycle * 12 cores * 2.4 GHz = 460.8 GF/s - node
+	8*460.8 + 15*1010.88 = 18849.6 GF/s = 18.85 TF/s - total
+	
+	
     
 5.  What is the approximate theoretical peak flop rate for your own machine?
+	My processor is a 2.9 GHz Intel Core i7 (2 cores)
+	2.9 GHz * 2 cores * 8 operations/second = 46.6 GF/s
+	
+	
